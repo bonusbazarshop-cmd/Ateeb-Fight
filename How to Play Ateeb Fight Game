@@ -1,0 +1,102 @@
+🚀 Step 1: Access the Game
+Option A: Play Online (Recommended)
+Go to your GitHub repository: https://github.com/bonusbazarshop-cmd/Ateeb-Fight
+Click the file index.html
+Click "Raw" button
+Or enable GitHub Pages in repo settings and access the live link
+Option B: Play Locally
+Clone the repository:
+bash
+git clone https://github.com/bonusbazarshop-cmd/Ateeb-Fight.git
+cd Ateeb-Fight
+Open index.html directly in your browser (just double-click the file)
+🎯 Step 2: Main Menu
+When you start the game, you'll see three options:
+
+Code
+🎮 ATEEB FIGHT 🎮
+├─ 👾 Single Player (Play 5 levels vs AI)
+├─ 👥 2-Player VS (Local battle with friend)
+└─ 🏆 Leaderboard (View top scores)
+🕹️ Step 3: Game Controls
+Single Player Mode
+Action	Key
+Move Up	W
+Move Down	S
+Move Left	A
+Move Right	D
+Shoot	Space
+Use Power-up	E
+Pause	ESC
+2-Player Mode
+Action	Player 1	Player 2
+Move	W A S D	↑ ← ↓ →
+Shoot	Space	Enter
+Power-up	E	P
+🎮 Step 4: Gameplay
+Your Character 🔵
+Player 1: Electric Blue circle with eyes
+Player 2: Hot Pink circle with eyes
+Has 100 HP (Health Points)
+Auto-aims at nearest enemy
+Enemies 👾
+Lime Green Aliens - Chase you
+Orange Robots - Strafe and dodge
+Show health bars above them
+Drop powerups when defeated
+Your Goal
+Defeat all enemies in each wave
+Complete 3 waves per level
+Survive and stay healthy (HP > 0)
+Progress through 5 levels
+📊 Step 5: 5 Levels Progression
+Level	Name	Enemies	Difficulty	Challenge
+1	🏋️ Training Ground	5-8 slow aliens	⭐ Easy	Learn controls
+2	🤖 Robot Factory	8-12 robots	⭐⭐ Medium	Faster enemies
+3	👽 Alien City	12-18 mixed	⭐⭐⭐ Hard	Very fast
+4	🛸 Space Station	15-20 mixed	⭐⭐⭐⭐ Extreme	Intense battle
+5	💥 Boss Battle	1 Boss + waves	⭐⭐⭐⭐⭐ Insane	Ultimate challenge
+⚡ Step 6: Power-ups (Collect & Use)
+When you defeat enemies, they drop power-ups:
+
+Power-up	Icon	Effect	Duration
+Speed Boost	⚡ Yellow	2x faster movement	5 seconds
+Rapid Fire	🔫 Orange	3x fire rate	5 seconds
+Shield	🛡️ Blue	Absorbs 1 hit	Until hit
+Health	❤️ Red	+30 HP	Instant
+Bomb	💣 Purple	Clears all enemies	Instant
+🎯 Step 7: Scoring System
+Code
+Total Score = (Enemies Killed × 100) + (Time Bonus × 10) + (Combo Bonus)
+
+Combo Multiplier:
+- Kill 3+ enemies quickly → 2x multiplier
+- Kill more = higher multiplier (up to 3x)
+- Displayed as "COMBO x2!" on screen
+📈 Step 8: HUD (Head-Up Display)
+Top Bar shows:
+
+📍 Current Level
+💯 Current Score
+🎯 Combo Multiplier (if active)
+👾 Enemy Count
+Bottom Bar shows:
+
+❤️ Health Bar
+🌊 Wave Progress (e.g., "Wave 2/3")
+💀 Kill Count
+⏱️ Time Remaining
+🏆 Step 9: Win/Lose Conditions
+You Win When:
+✅ Defeat all enemies in all 3 waves ✅ Health > 0 ✅ Level completes ✅ Advance to next level!
+
+You Lose When:
+❌ Health drops to 0 ❌ Time runs out ❌ Get hit too many times ❌ Game Over screen appears
+
+💾 Step 10: Save Your Score
+When you complete a level or game over:
+
+Enter your name in the text box
+Click "Submit Score"
+Score is saved to localStorage (persistent)
+Check Leaderboard to see top 10 scores
