@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ateeb Fight - Kids Gun Fighting Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="1024" height="768"></canvas>
+        <div id="menuScreen" class="screen active">
+            <div class="menu-content">
+                <h1 class="game-title">🎮 ATEEB FIGHT 🎮</h1>
+                <p class="subtitle">Epic Battle Adventure</p>
+                <div class="menu-buttons">
+                    <button class="btn btn-primary" id="singlePlayerBtn">👾 Single Player</button>
+                    <button class="btn btn-secondary" id="twoPlayerBtn">👥 2-Player VS</button>
+                    <button class="btn btn-tertiary" id="leaderboardBtn">🏆 Leaderboard</button>
+                </div>
+            </div>
+        </div>
+        <div id="levelSelectScreen" class="screen">
+            <div class="level-select-content"><h2>SELECT LEVEL</h2><div class="level-buttons" id="levelButtonsContainer"></div><button class="btn btn-back" id="backFromLevelBtn">← Back</button></div>
+        </div>
+        <div id="gameOverScreen" class="screen">
+            <div class="game-over-content"><h2 id="gameOverTitle">GAME OVER</h2><div class="game-over-stats"><p>Final Score: <span id="finalScore">0</span></p><p>Level: <span id="finalLevel">1</span></p><p>Enemies Defeated: <span id="enemiesDefeated">0</span></p></div><div class="game-over-buttons"><input type="text" id="playerNameInput" placeholder="Enter your name" maxlength="20"><button class="btn btn-primary" id="submitScoreBtn">Submit Score</button><button class="btn btn-secondary" id="retryBtn">Retry Level</button><button class="btn btn-tertiary" id="mainMenuBtn">Main Menu</button></div></div>
+        </div>
+        <div id="levelCompleteScreen" class="screen">
+            <div class="level-complete-content"><h2>🎉 LEVEL COMPLETE! 🎉</h2><div class="level-complete-stats"><p>Score: <span id="levelScore">0</span></p><p>Time Bonus: <span id="timeBonus">0</span></p><p>Accuracy: <span id="accuracy">0</span>%</p></div><div class="level-complete-buttons"><button class="btn btn-primary" id="nextLevelBtn">Next Level</button><button class="btn btn-secondary" id="retryLevelBtn">Retry</button><button class="btn btn-tertiary" id="mainMenuFromLevelBtn">Main Menu</button></div></div>
+        </div>
+        <div id="leaderboardScreen" class="screen">
+            <div class="leaderboard-content"><h2>🏆 TOP SCORES 🏆</h2><div id="leaderboardList" class="leaderboard-list"></div><button class="btn btn-back" id="backFromLeaderboardBtn">← Back</button></div>
+        </div>
+    </div>
+    <script src="systems/sound.js"></script>
+    <script src="systems/collision.js"></script>
+    <script src="systems/scoreManager.js"></script>
+    <script src="systems/levelManager.js"></script>
+    <script src="entities/bullet.js"></script>
+    <script src="entities/powerup.js"></script>
+    <script src="entities/player.js"></script>
+    <script src="entities/enemy.js"></script>
+    <script src="ui/hud.js"></script>
+    <script src="ui/menu.js"></script>
+    <script src="ui/screens.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
