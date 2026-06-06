@@ -1,0 +1,213 @@
+class Player {
+    constructor(x, y, playerNumber, game) {
+        this.game = game;
+        this.playerNumber = playerNumber;
+        this.x = x;
+        this.y = y;
+        this.width = 30;
+        this.height = 30;
+        this.radius = 15;
+
+        // Stats
+        this.health = 100;
+        this.maxHealth = 100;
+        this.speed = 3;
+        this.baseSpeed = 3;
+        this.shootCooldown = 0;
+        this.baseShootCooldown = 10;
+
+        // Color based on player number
+        this.color = playerNumber === 1 ? '#00d4ff' : '#ff006e';
+        this.glowColor = playerNumber === 1 ? 'rgba(0, 212, 255, 0.5)' : 'rgba(255, 0, 110, 0.5)';
+
+        // Controls
+        this.controls = playerNumber === 1
+            ? { up: 'w', down: 's', left: 'a', right: 'd', shoot: ' ', powerup: 'e' }
+            : { up: 'arrowup', down: 'arrowdown', left: 'arrowleft', right: 'arrowright', shoot: 'enter', powerup: 'p' };
+
+        // Powerups
+        this.powerups = [];
+        this.speedBoostTime = 0;
+        this.rapidFireTime = 0;
+        this.shieldTime = 0;
+        this.hasShield = false;
+
+        // Animation
+        this.animationFrame = 0;
+        this.wobbleAmount = 0;
+    }
+
+    update(keysPressed) {
+        // Movement
+        let moveX = 0;
+        let moveY = 0;
+
+        if (keysPressed[this.controls.up]) moveY -= 1;
+        if (keysPressed[this.controls.down]) moveY += 1;
+        if (keysPressed[this.controls.left]) moveX -= 1;
+        if (keysPressed[this.controls.right]) moveX += 1;
+
+        // Normalize diagonal movement
+        if (moveX !== 0 && moveY !== 0) {
+            moveX *= 0.707;
+            moveY *= 0.707;
+        }
+
+        this.x += moveX * this.speed;
+        this.y += moveY * this.speed;
+
+        // Keep in bounds
+        this.x = Math.max(this.radius, Math.min(this.game.width - this.radius, this.x));
+        this.y = Math.max(this.radius, Math.min(this.game.height - this.radius, this.y));
+
+        // Shooting
+        this.shootCooldown--;
+        if (keysPressed[this.controls.shoot] && this.shootCooldown <= 0) {
+            this.shoot();
+        }
+
+        // Powerup management
+        this.updatePowerups();
+
+        // Animation
+        this.animationFrame++;
+        this.wobbleAmount = Math.sin(this.animationFrame * 0.05) * 2;
+    }
+
+    shoot() {
+        const targetEnemy = this.game.enemies[0];
+        const angle = targetEnemy
+            ? Math.atan2(targetEnemy.y - this.y, targetEnemy.x - this.x)
+            : Math.atan2(0, 1);
+
+        const bullet = new Bullet(this.x, this.y, angle, this.playerNumber);
+        this.game.bullets.push(bullet);
+        this.game.soundManager.playShootSound();
+        this.shootCooldown = this.baseShootCooldown;
+    }
+
+    updatePowerups() {
+        this.speedBoostTime--;
+        if (this.speedBoostTime <= 0) {
+            this.speed = this.baseSpeed;
+        }
+
+        this.rapidFireTime--;
+        if (this.rapidFireTime <= 0) {
+            this.baseShootCooldown = 10;
+        }
+
+        this.shieldTime--;
+        if (this.shieldTime <= 0) {
+            this.hasShield = false;
+        }
+    }
+
+    applyPowerup(powerup) {
+        switch (powerup.type) {
+            case 'speedBoost':
+                this.speed = this.baseSpeed * 2;
+                this.speedBoostTime = 300;
+                break;
+            case 'rapidFire':
+                this.baseShootCooldown = 3;
+                this.rapidFireTime = 300;
+                break;
+            case 'shield':
+                this.hasShield = true;
+                this.shieldTime = 600;
+                break;
+            case 'health':
+                this.health = Math.min(this.health + 30, this.maxHealth);
+                break;
+            case 'bomb':
+                this.screenClearExplosion();
+                break;
+        }
+    }
+
+    screenClearExplosion() {
+        this.game.enemies.forEach((enemy) => {
+            enemy.health = 0;
+            this.game.createExplosion(enemy.x, enemy.y, 15);
+            this.game.scoreManager.addScore(250);
+        });
+        this.game.enemies = [];
+    }
+
+    takeDamage(amount) {
+        if (this.hasShield) {
+            this.hasShield = false;
+            this.shieldTime = 0;
+        } else {
+            this.health -= amount;
+        }
+    }
+
+    draw(ctx) {
+        // Draw glow
+        ctx.fillStyle = this.glowColor;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y + this.wobbleAmount, this.radius + 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw body
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y + this.wobbleAmount, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw eyes
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(this.x - 7, this.y + this.wobbleAmount - 5, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.x + 7, this.y + this.wobbleAmount - 5, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw shield if active
+        if (this.hasShield) {
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius + 10, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    }
+}
+
+// Particle class for explosions
+class Particle {
+    constructor(x, y, angle, velocity) {
+        this.x = x;
+        this.y = y;
+        this.vx = Math.cos(angle) * velocity;
+        this.vy = Math.sin(angle) * velocity;
+        this.life = 60;
+        this.maxLife = 60;
+        this.size = 4 + Math.random() * 4;
+        const colors = ['#ffee00', '#ff6b00', '#39ff14', '#00d4ff', '#ff006e'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.1; // Gravity
+        this.life--;
+    }
+
+    isDead() {
+        return this.life <= 0;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.life / this.maxLife;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+}
